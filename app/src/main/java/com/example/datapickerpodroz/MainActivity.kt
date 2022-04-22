@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -80,20 +81,30 @@ class MainActivity : AppCompatActivity() {
 
 
         ButtonSimulate.setOnClickListener(){
+
+            if(DataStart>=DataEtap2){
+                SymBox.text="Data końca mniejsza od daty początku!!"
+            }else{
+
             var Multiplier = (Seek.progress.toFloat()/10)+1
-            SymBox.text="Prędkość symulacji : "+Multiplier.toString()+"x"
+            var CzasPodrozy= ChronoUnit.DAYS.between(DataStart, DataEtap2)+1
+            var progressStatus=0
 
-            var CzasPodrozy=10
-            var i=1
+            SymBox.text="Prędkość symulacji : "+Multiplier.toString()+"x\n" +
+                    "Czas symulacji: "+CzasPodrozy.toFloat()/Multiplier+"s\nDługość podróży: "+
+                    CzasPodrozy+" dni"
 
-            while(i<=CzasPodrozy){
-                Handler(Looper.getMainLooper()).postDelayed(
-                    {
-                        SymBox.text= SymBox.text.toString()+"a"
-                        i++
-                    },
-                    (1000*Multiplier).toLong()
-                )
+            Thread {
+                while (progressStatus < CzasPodrozy) {
+                        progressStatus += 1
+                        Prog.setProgress(((progressStatus.toFloat()/CzasPodrozy)*100).toInt())
+                    try {
+                        Thread.sleep((1000/Multiplier).toLong())
+                    } catch (e: InterruptedException) {
+                        e.printStackTrace()
+                    }
+                }
+            }.start()
             }
 
         }

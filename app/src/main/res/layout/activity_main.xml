@@ -92,8 +92,8 @@
 
     <TextView
         android:id="@+id/textView_BoxSymulacja"
-        android:layout_width="196dp"
-        android:layout_height="47dp"
+        android:layout_width="267dp"
+        android:layout_height="76dp"
         android:text="Prędkość symulacji : 1.5x"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
